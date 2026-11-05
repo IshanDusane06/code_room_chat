@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isMember(roomCode) {
+      return exists(/databases/$(database)/documents/rooms/$(roomCode)/members/$(request.auth.uid));
+    }
+
+    match /rooms/{roomCode} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow delete: if false;
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['code', 'createdAt', 'createdBy', 'memberCount'])
+        && request.resource.data.code == roomCode
+        && roomCode.matches('^[0-9]{6}$')
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.memberCount == 1
+        && existsAfter(/databases/$(database)/documents/rooms/$(roomCode)/members/$(request.auth.uid));
+
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberCount'])
+        && request.resource.data.memberCount == resource.data.memberCount + 1
+        && !isMember(roomCode)
+        && existsAfter(/databases/$(database)/documents/rooms/$(roomCode)/members/$(request.auth.uid));
+
+      match /members/{uid} {
+        allow read: if signedIn();
+        allow update, delete: if false;
+
+        allow create: if signedIn()
+          && uid == request.auth.uid
+          && request.resource.data.keys().hasOnly(['displayName', 'joinedAt'])
+          && request.resource.data.displayName is string
+          && request.resource.data.displayName.size() <= 40
+          && request.resource.data.joinedAt == request.time;
+      }
+
+      match /messages/{messageId} {
+        allow read: if signedIn() && isMember(roomCode);
+        allow update, delete: if false;
+
+        allow create: if signedIn()
+          && isMember(roomCode)
+          && request.resource.data.keys().hasOnly(['text', 'senderId', 'senderName', 'createdAt'])
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 2000;
+      }
+    }
+  }
+}

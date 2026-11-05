@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "517797338654",
+    "project_id": "code-room-chat-4821",
+    "storage_bucket": "code-room-chat-4821.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517797338654:android:ff1eff04e01b7caa3ad80f",
+        "android_client_info": {
+          "package_name": "com.coderoom.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAufBykOIaLSH9fye6vwszc6vN1Wdtm_l8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
