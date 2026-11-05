@@ -9,6 +9,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/app_icons.dart';
+import '../../../settings/presentation/widgets/theme_toggle_button.dart';
 import '../providers/join_room_controller.dart';
 import '../widgets/code_input.dart';
 
@@ -63,101 +64,110 @@ class _JoinRoomPageState extends ConsumerState<JoinRoomPage>
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        padding: EdgeInsets.only(
-          top: 85.5.h,
-          bottom: MediaQuery.viewInsetsOf(context).bottom,
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                width: 64.w,
-                height: 64.w,
-                decoration: BoxDecoration(
-                  color: colors.codeField,
-                  shape: BoxShape.circle,
-                ),
-                child: AppIcon.key(
-                  size: Size(34.w, 17.w),
-                  color: colors.accentText,
-                ),
-              ),
-              SizedBox(height: 174.h),
-              Text(
-                'Join A Room',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.joinTitle.copyWith(
-                  color: colors.textPrimary,
-                ),
-              ),
-              SizedBox(height: 6.5.w),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 44.w),
-                child: Text(
-                  'Enter the code to join the anon chat room',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.joinSubtitle.copyWith(
-                    color: colors.textMuted,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            padding: EdgeInsets.only(
+              top: 85.5.h,
+              bottom: MediaQuery.viewInsetsOf(context).bottom,
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Container(
+                    width: 64.w,
+                    height: 64.w,
+                    decoration: BoxDecoration(
+                      color: colors.codeField,
+                      shape: BoxShape.circle,
+                    ),
+                    child: AppIcon.key(
+                      size: Size(34.w, 17.w),
+                      color: colors.accentText,
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(height: 32.5.w),
-              AnimatedBuilder(
-                animation: _shake,
-                builder: (context, child) => Transform.translate(
-                  offset: Offset(
-                    sin(_shake.value * pi * 6) * 8.w * (1 - _shake.value),
-                    0,
+                  SizedBox(height: 174.h),
+                  Text(
+                    'Join A Room',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.joinTitle.copyWith(
+                      color: colors.textPrimary,
+                    ),
                   ),
-                  child: child,
-                ),
-                child: CodeInput(
-                  controller: _codeController,
-                  enabled: !isLoading,
-                  onCompleted: controller.join,
-                ),
-              ),
-              SizedBox(height: 10.w),
-              SizedBox(
-                height: 24.w,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 180),
-                  child: switch (state) {
-                    JoinRoomLoading() => SizedBox.square(
-                      key: const ValueKey('loading'),
-                      dimension: 18.w,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
+                  SizedBox(height: 6.5.w),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 44.w),
+                    child: Text(
+                      'Enter the code to join the anon chat room',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.joinSubtitle.copyWith(
+                        color: colors.textMuted,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 32.5.w),
+                  AnimatedBuilder(
+                    animation: _shake,
+                    builder: (context, child) => Transform.translate(
+                      offset: Offset(
+                        sin(_shake.value * pi * 6) * 8.w * (1 - _shake.value),
+                        0,
+                      ),
+                      child: child,
+                    ),
+                    child: CodeInput(
+                      controller: _codeController,
+                      enabled: !isLoading,
+                      onCompleted: controller.join,
+                    ),
+                  ),
+                  SizedBox(height: 10.w),
+                  SizedBox(
+                    height: 24.w,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 180),
+                      child: switch (state) {
+                        JoinRoomLoading() => SizedBox.square(
+                          key: const ValueKey('loading'),
+                          dimension: 18.w,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: colors.accentText,
+                          ),
+                        ),
+                        JoinRoomFailed(:final message) => Text(
+                          message,
+                          key: ValueKey(message),
+                          style: AppTextStyles.joinHelper.copyWith(
+                            color: colors.error,
+                          ),
+                        ),
+                        _ => const SizedBox.shrink(),
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 6.w),
+                  TextButton(
+                    onPressed: isLoading ? null : controller.create,
+                    child: Text(
+                      'Create a new room',
+                      style: AppTextStyles.joinAction.copyWith(
                         color: colors.accentText,
                       ),
                     ),
-                    JoinRoomFailed(:final message) => Text(
-                      message,
-                      key: ValueKey(message),
-                      style: AppTextStyles.joinHelper.copyWith(
-                        color: colors.error,
-                      ),
-                    ),
-                    _ => const SizedBox.shrink(),
-                  },
-                ),
-              ),
-              SizedBox(height: 6.w),
-              TextButton(
-                onPressed: isLoading ? null : controller.create,
-                child: Text(
-                  'Create a new room',
-                  style: AppTextStyles.joinAction.copyWith(
-                    color: colors.accentText,
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: MediaQuery.viewPaddingOf(context).top + 12.w,
+            right: 20.w,
+            child: const ThemeToggleButton(),
+          ),
+        ],
       ),
     );
   }

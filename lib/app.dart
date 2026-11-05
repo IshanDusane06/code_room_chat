@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/providers/core_providers.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/settings/presentation/providers/settings_providers.dart';
 
 class CodeRoomApp extends ConsumerWidget {
   const CodeRoomApp({super.key});
@@ -13,6 +14,9 @@ class CodeRoomApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final themeMode = ThemeMode.values.byName(
+      ref.watch(themeModeProvider).name,
+    );
     ref.read(notificationServiceProvider).onRoomSelected = (code) =>
         router.go(AppRoutes.chat(code));
 
@@ -24,7 +28,7 @@ class CodeRoomApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.system,
+        themeMode: themeMode,
         routerConfig: router,
         builder: (context, child) {
           final isDark = Theme.of(context).brightness == Brightness.dark;
