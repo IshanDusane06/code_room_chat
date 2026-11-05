@@ -58,14 +58,7 @@ class RoomHeader extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: colors.headerTrailing,
-              shape: BoxShape.circle,
-            ),
-          ),
+          SizedBox(width: size),
         ],
       ),
     );

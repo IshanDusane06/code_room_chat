@@ -14,7 +14,8 @@ Anonymous, room-based realtime chat for Android, built with Flutter and Firebase
 - Join an existing room or create a new one
 - Offline persistence: loaded chat stays visible when rejoining without connectivity
 - Offline sending: messages queue locally and deliver in order on reconnect
-- UI animations, dark and light mode (follows the system setting), and local notifications
+- UI animations and local notifications
+- Dark and light mode, with a toggle on the Join screen. The app follows the system setting until the toggle is used, and the choice is saved
 
 ## Tech stack
 
@@ -51,7 +52,11 @@ lib/
     │   ├── data/                 Remote and local data sources, models,
     │   │                         repository, name and code generators
     │   └── presentation/         Providers, pages, widgets
-    └── chat/                     Messages, sync, pagination
+    ├── chat/                     Messages, sync, pagination
+    │   ├── domain/
+    │   ├── data/
+    │   └── presentation/
+    └── settings/                 Saved theme choice and the theme toggle
         ├── domain/
         ├── data/
         └── presentation/
@@ -115,7 +120,9 @@ Access is enforced in [firestore.rules](firestore.rules):
 
 ## Notifications
 
-Notifications are local. While a chat is open and the app is in the background, messages from other members raise a notification, and tapping it opens the room. Nothing arrives after the OS stops the app: that would need FCM and a Cloud Function, which requires Firebase's paid Blaze plan.
+Notifications are local. While a chat is open and the app is in the background, messages from other members raise a notification, and tapping it opens the room.
+
+This only works for a few seconds after leaving the app. On the Android 15 and 16 emulators tested, the system cuts a background app's network access about 6 seconds after it leaves the screen, so later messages arrive when the app is reopened and raise no notification. Nothing arrives after the OS stops the app either. Reliable delivery would need FCM and a Cloud Function, which requires Firebase's paid Blaze plan.
 
 ## Running the project
 

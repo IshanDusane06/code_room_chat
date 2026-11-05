@@ -7,7 +7,6 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.codeField,
     required this.codeDash,
     required this.circle,
-    required this.headerTrailing,
     required this.card,
     required this.accent,
     required this.onAccent,
@@ -27,7 +26,6 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color codeField;
   final Color codeDash;
   final Color circle;
-  final Color headerTrailing;
   final Color card;
   final Color accent;
   final Color onAccent;
@@ -47,7 +45,6 @@ class AppColors extends ThemeExtension<AppColors> {
     codeField: Color(0xFF27272A),
     codeDash: Color(0xFFA1A1AA),
     circle: Color(0xFF1F2937),
-    headerTrailing: Color(0xFF000000),
     card: Color(0xCC111827),
     accent: Color(0xFFB1E457),
     onAccent: Color(0xFF000000),
@@ -68,7 +65,6 @@ class AppColors extends ThemeExtension<AppColors> {
     codeField: Color(0xFFE4E4E7),
     codeDash: Color(0xFF71717A),
     circle: Color(0xFFE2E8F0),
-    headerTrailing: Color(0xFFE2E8F0),
     card: Color(0xFFFFFFFF),
     accent: Color(0xFFB1E457),
     onAccent: Color(0xFF000000),
@@ -96,7 +92,6 @@ class AppColors extends ThemeExtension<AppColors> {
       codeField: mix(codeField, other.codeField),
       codeDash: mix(codeDash, other.codeDash),
       circle: mix(circle, other.circle),
-      headerTrailing: mix(headerTrailing, other.headerTrailing),
       card: mix(card, other.card),
       accent: mix(accent, other.accent),
       onAccent: mix(onAccent, other.onAccent),

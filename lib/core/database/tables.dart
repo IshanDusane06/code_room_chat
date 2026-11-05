@@ -23,6 +23,15 @@ class RoomIdentities extends Table {
   Set<Column<Object>> get primaryKey => {roomCode};
 }
 
+@DataClassName('AppSettingsRow')
+class AppSettings extends Table {
+  IntColumn get id => integer().withDefault(const Constant(0))();
+  TextColumn get themeMode => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 @DataClassName('MessageRow')
 @TableIndex(name: 'messages_room_sort', columns: {#roomCode, #sortAtMicros})
 class Messages extends Table {
