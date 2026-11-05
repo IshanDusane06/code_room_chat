@@ -3,7 +3,7 @@
 Anonymous, room-based realtime chat for Android, built with Flutter and Firebase. Join a room with a 6-digit code or create a new one, get a generated identity for that room, and chat. Rooms you have already loaded stay readable with no connection, and messages you send offline are delivered when you reconnect.
 
 - **APK:** [apk/code-room.apk](apk/code-room.apk)
-- **Demo video:** _link to be added_
+- **Demo video:** https://drive.google.com/file/d/1e8wCqrnX_Sium6EyRJcVTh-oR2iopOlz/view
 
 ## Features
 
